@@ -1,22 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+import {Bible} from "./bible";
 
-function App() {
+
+const App = props => {
+  const [state, setState] = useState({
+    verses: {},
+    verbs: {},
+  });
+
+  useEffect(() => {
+    if (props.dictionary) {
+      fetch("/"+props.dictionary).then((res) =>
+          res.json()).then(res => {
+        setState({...state, bible: new Bible(res)});
+      });
+    }
+  }, [props.dictionary]);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
