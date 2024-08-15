@@ -5,8 +5,6 @@ import {Bible} from "./bible";
 
 const App = props => {
   const [state, setState] = useState({
-    verses: {},
-    verbs: {},
   });
 
   useEffect(() => {
