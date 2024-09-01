@@ -14,6 +14,81 @@ const books = [ "", "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
     "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter",
     "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
 
+export const parsingCategories = [
+    {
+        category: "Voice", items: [
+            {id: "active", label: "Active"},
+            {id: "middle", label: "Middle"},
+            { id: "passive", label: "Passive"},
+        ]},
+    { category: "Tense", items: [
+            { id: "present", label: "Present"},
+            { id: "imperfect", label: "Imperfect"},
+            { id: "future", label: "Future"},
+            { id: "aorist", label: "Aorist"},
+            { id: "perfect", label: "Perfect"},
+            { id: "pluperfect", label: "Pluperfect"},
+        ]},
+    { category: "Mood", items: [
+            { id: "indicative", label: "Indicative"},
+            { id: "imperative", label: "Imperative"},
+            { id: "subjunctive", label: "Subjunctive"},
+            { id: "optative", label: "Optative"},
+            { id: "infinitive", label: "Infinitive"},
+            { id: "participle", label: "Participle"},
+        ]},
+    { category: "Person", items: [
+            {id: "first", label: "First"},
+            {id: "second", label: "Second"},
+            {id: "third", label: "Third"},
+        ]
+    },
+    { category: "Number", items: [
+            { id: "singular", label: "Singular"},
+            { id: "plural", label: "Plural"},
+        ]},
+    { category: "Case", items: [
+            { id: "nominative", label: "Nominative"},
+            { id: "accusative", label: "Accusative"},
+            { id: "genitive", label: "Genitive"},
+            { id: "dative", label: "Dative"},
+        ]},
+    { category: "Gender", items: [
+            { id: "masculine", label: "Masculine"},
+            { id: "feminine", label: "Feminine"},
+            { id: "neuter", label: "Neuter"},
+        ]}
+];
+
+export const parsingCategoryLetters = {
+    "active": { code: "A", offset: 2 },
+    "middle": { code: "M", offset: 2 },
+    "passive": { code: "P", offset: 2 },
+    "present": { code: "P", offset: 1},
+    "imperfect": { code: "I", offset: 1},
+    "future": { code: "F", offset: 1},
+    "aorist": { code: "A", offset: 1},
+    "perfect": { code: "X", offset: 1},
+    "pluperfect": { code: "Y", offset: 1},
+    "indicative": { code: "I", offset: 3},
+    "imperative": { code: "D", offset: 3},
+    "subjunctive": { code: "S", offset: 3},
+    "optative": { code: "O", offset: 3},
+    "infinitive": { code: "N", offset: 3},
+    "participle": { code: "P", offset: 3},
+    "first": { code: "1", offset: 0},
+    "second": { code: "2", offset: 0},
+    "third": { code: "3", offset: 0},
+    "singular": { code: "S", offset: 5},
+    "plural": { code: "P", offset: 5},
+    "nominative": { code: "N", offset: 4},
+    "accusative": { code: "A",offset: 4},
+    "genitive": { code: "G",offset: 4},
+    "dative": { code: "D",offset: 4},
+    "masculine": { code: "M", offset: 6},
+    "feminine": { code: "F", offset: 6},
+    "neuter": { code: "N", offset: 6},
+}
 export class Bible {
     constructor(verses) {
        this.verses = verses;
