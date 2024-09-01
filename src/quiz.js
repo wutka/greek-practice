@@ -36,9 +36,13 @@ const VerseText = props => {
 export const Quiz =  props => {
     const [state, setState] = useState({word: props.bible.chooseRandomWord(props.allowableParsings)});
 
+    console.log("allowable parsings", props.allowableParsings);
+    console.log("state.word", state.word);
     if (!state.word) {
+        console.log("No word available");
         return;
     }
+    console.log("A word is available");
     return (
         <VerseText verseWords={state.word.verseWords} targetWord={state.word.targetWord} />
     );

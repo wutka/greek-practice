@@ -55,13 +55,18 @@ export class Bible {
             } else {
                 const lemmas = Object.keys(this.parsings[parsing]);
                 const randomLemma = lemmas[Math.floor(lemmas.length * Math.random())];
+                console.log("random lemma", randomLemma);
                 const words = this.parsings[parsing][randomLemma];
                 const word = words[Math.floor(words.length * Math.random())];
                 console.log("Chose word", word);
-                const verse = this.verses[word[BOOK]-1][word[CHAPTER-1]][word[VERSE-1]];
-                return { book: books[word[BOOK]], chapter: word[CHAPTER], verseNumber: word[VERSE],
+                console.log("Book", this.verses[word[BOOK]-1]);
+                console.log("Chapter", this.verses[word[BOOK]-1][word[CHAPTER]-1]);
+                const verse = this.verses[word[BOOK]-1][word[CHAPTER]-1][word[VERSE]-1];
+                const result =  { book: books[word[BOOK]], chapter: word[CHAPTER], verseNumber: word[VERSE],
                     verseWords: verse,
                     targetWord: word }
+                console.log("Random word result", result);
+                return result;
             }
         }
     }
@@ -74,7 +79,7 @@ const extractParsings = verses => {
             for (const verse of chapter) {
                 for (let i=0; i < verse.length; i++) {
                     const word = verse[i];
-                    if (word[PART_OF_SPEECH !== "V-"]) {
+                    if (word[PART_OF_SPEECH] !== "V-") {
                         continue;
                     }
                     const key = word[PARSING];
