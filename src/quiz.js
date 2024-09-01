@@ -4,8 +4,25 @@ import { Navigate, BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import {Bible} from "./bible";
 
+const QuizBase = styled.div`
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas: "pad1 book-chapter-verse pad1"
+                         "pad2 verse pad3"
+                         "pad2 answers pad3"
+                         "pad2 controls pad3";
+    padding: 1em;
+`;
+
+const BookChapterVerse = styled.div`
+    grid-area: book-chapter-verse;
+    font-size: xx-large;
+    color: black;
+`
+
 const VerseWord = styled.div`
-    font-size: large;
+    font-size: xx-large;
 `
 
 const HighlightedVerseWord = styled.div`
@@ -34,17 +51,17 @@ const VerseText = props => {
     )
 }
 export const Quiz =  props => {
-    const [state, setState] = useState({word: props.bible.chooseRandomWord(props.allowableParsings)});
+    const [state, setState] = useState({});
 
-    console.log("allowable parsings", props.allowableParsings);
-    console.log("state.word", state.word);
-    if (!state.word) {
-        console.log("No word available");
+    if (!props.currentWord) {
         return;
     }
-    console.log("A word is available");
+
     return (
-        <VerseText verseWords={state.word.verseWords} targetWord={state.word.targetWord} />
+        <QuizBase>
+            <BookChapterVerse>{props.currentWord.book} {props.currentWord.chapter+":"+props.currentWord.verseNumber}</BookChapterVerse>
+            <VerseText style={{gridArea: "verse"}} verseWords={props.currentWord.verseWords} targetWord={props.currentWord.targetWord} />
+        </QuizBase>
     );
 }
 export default Quiz;

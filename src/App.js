@@ -20,17 +20,22 @@ const AppBase = styled.div`
 
 const App = props => {
   const [state, setState] = useState({
-    settings: createSettings(), bible: new Bible([]),
+    loaded: false, settings: createSettings(), bible: new Bible([]), currentWord: null, allowableParsings: [],
   });
 
   const setSettings = (settings) => {
     if (state.bible) {
-      console.log("recomputed allowable parsings", state.allowableParsings);
       const allowableParsings = state.bible.computeAllowableParsings(settings);
-      setState({...state, settings: settings, allowableParsings: allowableParsings});
+      const currentWord = state.bible.chooseRandomWord(allowableParsings);
+      setState({...state, settings: settings, allowableParsings: allowableParsings, currentWord: currentWord});
     } else {
       setState({...state, settings: settings});
     }
+  }
+
+  const chooseNextWord = () => {
+      const currentWord = state.bible.chooseRandomWord(state.allowableParsings);
+      setState({...state, currentWord: currentWord});
   }
 
   useEffect(() => {
@@ -39,11 +44,16 @@ const App = props => {
           res.json()).then(res => {
             const bible = new Bible(res);
             const allowableParsings = bible.computeAllowableParsings(state.settings);
-            console.log("Loaded bible, allowable parsings", allowableParsings);
-          setState({...state, bible: bible, allowableParsings: allowableParsings});
+            const currentWord = bible.chooseRandomWord(allowableParsings);
+          setState({...state, loaded: true, bible: bible, allowableParsings: allowableParsings,
+                currentWord: currentWord });
       });
     }
   }, [props.dictionary]);
+
+  if (!state.loaded) {
+      return (<div>Loading...</div>);
+  }
 
   return (
       <BrowserRouter>
@@ -52,7 +62,13 @@ const App = props => {
           <Routes>
             <Route exact path="/" element={<Settings setOptions={setSettings}/>} />
             <Route exact path="/settings" element={<Settings setOptions={setSettings}/>} />
-            <Route exact path="/quiz" element={<Quiz settings={state.settings} bible={state.bible} allowableParsings={state.allowableParsings}/>} />
+            <Route exact path="/quiz" element={<Quiz settings={state.settings}
+                                                     bible={state.bible}
+                                                     allowableParsings={state.allowableParsings}
+                                                     currentWord={state.currentWord}
+                                                     chooseNextWord={chooseNextWord}
+                                                />}
+                />
           </Routes>
 
         </AppBase>

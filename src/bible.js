@@ -23,12 +23,10 @@ export class Bible {
     computeAllowableParsings(settings) {
         const allowable = {}
         for (const parsing of Object.keys(this.parsings)) {
-            console.log("Looking at parsing", parsing);
             let valid = true;
             for (let i=0; i < 7; i++) {
                 if (parsing[i] !== "-" && !settings[i][parsing[i]]) {
                     valid = false;
-                    console.log("Not allowing because", parsing[i], "is false in settings");
                     break;
                 }
             }
@@ -43,7 +41,6 @@ export class Bible {
         if (!allowableParsings) {
             return null;
         }
-        console.log("choosing random word from parsings", allowableParsings);
         let numWords = 0;
         for (const parsing of Object.keys(allowableParsings)) {
             numWords += allowableParsings[parsing];
@@ -55,17 +52,12 @@ export class Bible {
             } else {
                 const lemmas = Object.keys(this.parsings[parsing]);
                 const randomLemma = lemmas[Math.floor(lemmas.length * Math.random())];
-                console.log("random lemma", randomLemma);
                 const words = this.parsings[parsing][randomLemma];
                 const word = words[Math.floor(words.length * Math.random())];
-                console.log("Chose word", word);
-                console.log("Book", this.verses[word[BOOK]-1]);
-                console.log("Chapter", this.verses[word[BOOK]-1][word[CHAPTER]-1]);
                 const verse = this.verses[word[BOOK]-1][word[CHAPTER]-1][word[VERSE]-1];
                 const result =  { book: books[word[BOOK]], chapter: word[CHAPTER], verseNumber: word[VERSE],
                     verseWords: verse,
                     targetWord: word }
-                console.log("Random word result", result);
                 return result;
             }
         }
