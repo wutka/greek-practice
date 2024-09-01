@@ -8,45 +8,91 @@ export const WORD = 6;
 export const NORMALIZED_WORD = 7;
 export const LEMMA = 8;
 
+const books = [ "", "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
+    "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians",
+    "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy",
+    "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter",
+    "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
+
 export class Bible {
     constructor(verses) {
        this.verses = verses;
-       this.verbs = extractVerbs(verses);
-       console.log("Random verb: ", this.pickVerb());
+       this.parsings = extractParsings(verses);
     }
 
-    pickVerb(person="", tense="", voice="", mood="", _case="", num="", gender="") {
-        const filteredVerbs = [];
-        for (const verb of this.verbs) {
-            const parsing = verb[PARSING];
-            if (person && !person.includes(parsing[0])) continue;
-            if (tense && !tense.includes(parsing[1])) continue;
-            if (voice && !voice.includes(parsing[2])) continue;
-            if (mood && !mood.includes(parsing[3])) continue;
-            if (_case && !_case.includes(parsing[4])) continue;
-            if (num && !num.includes(parsing[5])) continue;
-            if (gender && !gender.includes(parsing[6])) continue;
-            filteredVerbs.push(verb);
+    computeAllowableParsings(settings) {
+        const allowable = {}
+        for (const parsing of Object.keys(this.parsings)) {
+            console.log("Looking at parsing", parsing);
+            let valid = true;
+            for (let i=0; i < 7; i++) {
+                if (parsing[i] !== "-" && !settings[i][parsing[i]]) {
+                    valid = false;
+                    console.log("Not allowing because", parsing[i], "is false in settings");
+                    break;
+                }
+            }
+            if (valid) {
+                allowable[parsing] = Object.keys(this.parsings[parsing]).length;
+            }
         }
-        return filteredVerbs[Math.floor(filteredVerbs.length * Math.random())];
+        return allowable;
     }
 
+    chooseRandomWord(allowableParsings) {
+        if (!allowableParsings) {
+            return null;
+        }
+        console.log("choosing random word from parsings", allowableParsings);
+        let numWords = 0;
+        for (const parsing of Object.keys(allowableParsings)) {
+            numWords += allowableParsings[parsing];
+        }
+        let randomWord = Math.floor(numWords * Math.random());
+        for (const parsing of Object.keys(allowableParsings)) {
+            if (randomWord >= allowableParsings[parsing]) {
+                randomWord -= allowableParsings[parsing];
+            } else {
+                const lemmas = Object.keys(this.parsings[parsing]);
+                const randomLemma = lemmas[Math.floor(lemmas.length * Math.random())];
+                const words = this.parsings[parsing][randomLemma];
+                const word = words[Math.floor(words.length * Math.random())];
+                console.log("Chose word", word);
+                const verse = this.verses[word[BOOK]-1][word[CHAPTER-1]][word[VERSE-1]];
+                return { book: books[word[BOOK]], chapter: word[CHAPTER], verseNumber: word[VERSE],
+                    verseWords: verse,
+                    targetWord: word }
+            }
+        }
+    }
 }
 
-const extractVerbs = verses => {
-    const verbs = [];
+const extractParsings = verses => {
+    const parsings = {};
     for (const book of verses) {
         for (const chapter of book) {
             for (const verse of chapter) {
                 for (let i=0; i < verse.length; i++) {
                     const word = verse[i];
-                    word.versePos = i;
-                    if (word[PART_OF_SPEECH] === "V-") {
-                        verbs.push(word);
+                    if (word[PART_OF_SPEECH !== "V-"]) {
+                        continue;
                     }
+                    const key = word[PARSING];
+                    word.versePos = i;
+                    let parsingsKey = parsings[key];
+                    if (!parsingsKey) {
+                        parsingsKey = {}
+                        parsings[key] = parsingsKey;
+                    }
+                    let byLemma = parsingsKey[word[LEMMA]];
+                    if (!byLemma) {
+                        byLemma = []
+                        parsingsKey[word[LEMMA]] = byLemma;
+                    }
+                    byLemma.push(word);
                 }
             }
         }
     }
-    return verbs;
+    return parsings;
 }
