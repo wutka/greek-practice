@@ -7,6 +7,16 @@
   pointer-events: none;
 }
 
+@font-face {
+  font-family: "SBL Greek";
+  src: local("SBL Greek"), url("./fonts/SBL_grk.ttf") format("truetype");
+  font-weight: normal;
+}
+
+.font-face-sblgk {
+  font-family: "SBL Greek";
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

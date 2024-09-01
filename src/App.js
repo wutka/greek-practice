@@ -1,3 +1,4 @@
+import './fonts/SBL_grk.ttf';
 import './App.css';
 import React, {useState, useEffect} from 'react';
 import { Navigate, BrowserRouter, Route, Routes } from "react-router-dom";

@@ -2,7 +2,8 @@ import './App.css';
 import React, {useState, useEffect} from 'react';
 import { Navigate, BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import {parsingCategories, parsingCategoryLetters} from "./bible";
+import {parsingCategories, parsingCategoryLetters, PARSING} from "./bible";
+import boostrap from "bootstrap";
 
 const QuizBase = styled.div`
     display: grid;
@@ -46,7 +47,15 @@ const ParsingGroupBase = styled.div`
     flex-direction: column;
 `
 
+const Controls = styled.div`
+    display: flex;
+    flex-direction: row;
+    grid-area: controls;
+    column-gap: 100px;
+`
+
 const VerseDiv = styled.div`
+    font-family: "SBL Greek";
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -86,11 +95,11 @@ export const Quiz =  props => {
     const copyState = (state) => {
         const newCategoryMap = {};
         for (const [category, items] of Object.entries(state.categoryMap)) {
-            newCategoryMap[category.category] = {};
-            newCategoryMap[category.category].enabled = state[category.category].enabled;
-            newCategoryMap[category.category].itemOrder = state[category.category].itemOrder;
-            for (const categoryItem of items) {
-                newCategoryMap[category.category][categoryItem.id] = {
+            newCategoryMap[category] = {};
+            newCategoryMap[category].enabled = state.categoryMap[category].enabled;
+            newCategoryMap[category].itemOrder = state.categoryMap[category].itemOrder;
+            for (const categoryItem of Object.values(items)) {
+                newCategoryMap[category][categoryItem.id] = {
                     id: categoryItem.id,
                     label: categoryItem.label,
                     checked: categoryItem.checked,
@@ -126,8 +135,59 @@ export const Quiz =  props => {
     }
 
     const onChange = ev => {
+        const target = ev.target;
+        const id = target.id;
 
+        const newState = copyState(state);
+
+        const categoryName = parsingCategoryLetters[id].category;
+        const category = newState.categoryMap[categoryName];
+
+        for (const itemName of category.itemOrder) {
+            const item = category[itemName];
+            if (item.id === id) {
+                item.checked = true;
+            } else {
+                item.checked = false;
+            }
+        }
+        setState(newState);
     }
+
+    const doCheck = ev => {
+        const newState = copyState(state);
+        newState.checkingResults = true;
+
+        for (const categoryName of categoryList) {
+            const category = newState.categoryMap[categoryName];
+
+            for (const itemName of category.itemOrder) {
+                const item = category[itemName];
+                const codeInfo = parsingCategoryLetters[item.id];
+                item.correct = false;
+                item.incorrect = false;
+                if (item.checked) {
+                    if (codeInfo.code === props.currentWord.targetWord[PARSING][codeInfo.offset]) {
+                        item.correct = true;
+                    } else {
+                        item.incorrect = true;
+                    }
+                } else {
+                    if (codeInfo.code === props.currentWord.targetWord[PARSING][codeInfo.offset]) {
+                        item.correct = true;
+                    }
+                }
+            }
+        }
+        setState(newState);
+    }
+
+    const doNext = ev => {
+        setState(createInitialState);
+        props.chooseNextWord();
+    }
+
+    const noChange = ev => { return false; }
 
     const ParsingGroup = props => {
         return (
@@ -141,21 +201,21 @@ export const Quiz =  props => {
                         </div>);
                     } else {
                         if (item.correct) {
-                            return (<div key={item.id + "div"} style={{color: "#20ff20"}}><input className="form-check-input" type="checkbox"
+                            return (<div key={item.id + "div"} style={{color: "#008000"}}><input className="form-check-input" type="checkbox"
                                                                       id={item.id} name={item.id}
-                                                                      checked={item.checked} />
-                                <label className="form-check-label" htmlFor={item.id}>{item.label}</label>);
+                                                                      checked={item.checked} onChange={noChange}/>
+                                <label className="form-check-label" htmlFor={item.id}>{item.label}</label>
                             </div>);
                         } else if (item.incorrect) {
                             return (<div key={item.id + "div"} style={{color: "#ff2020"}}><input className="form-check-input" type="checkbox"
                                                                       id={item.id} name={item.id}
-                                                                      checked={item.checked} />
+                                                                      checked={item.checked} onChange={noChange}/>
                                     <label className="form-check-label" htmlFor={item.id}>{item.label}</label>
                             </div>);
                         } else {
                             return (<div key={item.id + "div"}><input className="form-check-input" type="checkbox"
                                                                                                              id={item.id} name={item.id}
-                                                                                                             checked={item.checked} />
+                                                                                                             checked={item.checked} onChange={noChange}/>
                                     <label className="form-check-label" htmlFor={item.id}>{item.label}</label>
                             </div>);
                         }
@@ -176,7 +236,10 @@ export const Quiz =  props => {
                         categoryInfo.itemOrder.map(id => categoryInfo[id])}/>
                 })}
             </ParsingGridBase>
-        </QuizBase>
-    );
+            <Controls>
+                <button type="button" className="btn btn-primary" onClick={doCheck} id="check" name="check">Check</button>
+                <button type="button" className="btn btn-primary" onClick={doNext} id="next" name="next">Next</button>
+            </Controls>
+        </QuizBase> ) ;
 }
 export default Quiz;
