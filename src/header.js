@@ -55,7 +55,7 @@ export const Header =  props => {
                 <button type="button" className="btn btn-primary" onClick={onAbout} id="about"
                         name="about">About</button>
             </Controls>
-            <Logo>NT Greek Practice</Logo>
+            <Logo>NT Greek Verb Practice</Logo>
         </HeaderBase>);
 
 }
