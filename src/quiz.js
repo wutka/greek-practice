@@ -50,6 +50,8 @@ const ParsingGroupBase = styled.div`
 const Controls = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
     grid-area: controls;
     column-gap: 100px;
 `
@@ -150,7 +152,19 @@ export const Quiz =  props => {
             } else {
                 item.checked = false;
             }
+            if (categoryName === "Mood") {
+                if (id === "participle") {
+                    newState.categoryMap["Person"].enabled = false;
+                    newState.categoryMap["Gender"].enabled = true;
+                    newState.categoryMap["Case"].enabled = true;
+                } else {
+                    newState.categoryMap["Person"].enabled = true;
+                    newState.categoryMap["Gender"].enabled = false;
+                    newState.categoryMap["Case"].enabled = false;
+                }
+            }
         }
+
         setState(newState);
     }
 
@@ -191,12 +205,12 @@ export const Quiz =  props => {
 
     const ParsingGroup = props => {
         return (
-            <ParsingGroupBase className="form-check" disabled={!props.enabled}>
+            <ParsingGroupBase className="form-check">
                 <LabelDiv>{props.category}</LabelDiv>
                 {props.items.map(item => {
                     if (!state.checkingResults) {
                         return (<div key={item.id+"div"}><input className="form-check-input" type="checkbox" id={item.id} name={item.id}
-                                                                onChange={onChange} checked={item.checked}/>
+                                                                onChange={onChange} checked={item.checked} disabled={!props.enabled}/>
                             <label className="form-check-label" htmlFor={item.id}>{item.label}</label>
                         </div>);
                     } else {

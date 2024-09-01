@@ -6,17 +6,29 @@ import styled from "styled-components";
 import {Bible} from "./bible";
 import {Settings, createSettings} from "./settings.js";
 import Quiz from "./quiz.js";
-import Header from "./header.js";
+import About from "./about.js";
+import {HeaderBase, Header} from "./header.js";
 
 
 const AppBase = styled.div`
   display: grid;
   color: gray;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
+  height: 100vh;
+  grid-template-columns: 40px auto 40px;
+  grid-template-rows: 100px auto;
   grid-template-areas:
-    "header"
-    "main";
+    "pad1 header pad2"
+    "pad1 main pad2";
+`;
+
+const Pad1 = styled.div`
+    grid-area: pad1;
+    background-color: lightseagreen;
+`;
+
+const Pad2 = styled.div`
+    grid-area: pad2;
+    background-color: lightseagreen;
 `;
 
 const App = props => {
@@ -59,10 +71,12 @@ const App = props => {
   return (
       <BrowserRouter>
         <AppBase>
-          <Header/>
+          <Header style={{gridArea: "header"}}/>
+          <Pad1/>
           <Routes>
             <Route exact path="/" element={<Settings setOptions={setSettings}/>} />
             <Route exact path="/settings" element={<Settings setOptions={setSettings}/>} />
+            <Route exact path="/about" element={<About/>} />
             <Route exact path="/quiz" element={<Quiz settings={state.settings}
                                                      bible={state.bible}
                                                      allowableParsings={state.allowableParsings}
@@ -71,7 +85,7 @@ const App = props => {
                                                 />}
                 />
           </Routes>
-
+          <Pad2/>
         </AppBase>
       </BrowserRouter>
   );
