@@ -53,7 +53,7 @@ const App = props => {
 
   useEffect(() => {
     if (props.tables) {
-      fetch("/"+props.tables).then((res) =>
+      fetch(props.tables).then((res) =>
           res.json()).then(res => {
             const bible = new Bible(res);
             const allowableParsings = bible.computeAllowableParsings(state.settings);
@@ -69,7 +69,7 @@ const App = props => {
   }
 
   return (
-      <BrowserRouter>
+      <BrowserRouter basename="/ntgreekverbpractice">
         <AppBase>
           <Header style={{gridArea: "header"}}/>
           <Pad1/>

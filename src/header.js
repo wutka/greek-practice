@@ -33,15 +33,15 @@ export const Header =  props => {
     const navigate = useNavigate();
 
     const onSettings = ev => {
-        navigate("/settings");
+        navigate("./settings");
     }
 
     const onQuiz = ev => {
-        navigate("/quiz");
+        navigate("./quiz");
     }
 
     const onAbout = ev => {
-        navigate("/about");
+        navigate("./about");
     }
 
     return (

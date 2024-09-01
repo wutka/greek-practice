@@ -138,7 +138,7 @@ export const Settings =  props => {
             return;
         }
         props.setOptions(state.settings);
-        navigate("/quiz");
+        navigate("../quiz");
     }
 
     return (
