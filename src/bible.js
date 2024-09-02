@@ -149,6 +149,24 @@ const extractParsings = verses => {
                     if (word[PART_OF_SPEECH] !== "V-") {
                         continue;
                     }
+
+                    if (book === 1 && chapter === 27 && verse === 46 &&
+                        word[PARSING] === "2AAI-S--") {
+                        // Skip SABAQANI in Matt 27:46 since it is Aramaic
+                        continue;
+                    } else if (book === 2 && chapter === 7 && verse === 34 &&
+                        word[PARSING] === "2APD-S--") {
+                        // Skip EFFAQA in Mark 7:34
+                        continue;
+                    } else if (book === 2 && chapter === 5 && verse === 41 &&
+                        word[PARSING] === "2AAD-S--") {
+                        // Skip KOUM in Mark 5:41
+                        continue;
+                    } else if (book === 7 && chapter === 16 && verse === 22 &&
+                        word[PARSING] === "2AAD-S--") {
+                        // Skip QA (MARANA QA) in 1 Cor 16:22
+                        continue;
+                    }
                     const key = word[PARSING];
                     word.versePos = i;
                     let parsingsKey = parsings[key];
