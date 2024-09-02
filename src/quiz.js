@@ -157,10 +157,17 @@ export const Quiz =  props => {
                     newState.categoryMap["Person"].enabled = false;
                     newState.categoryMap["Gender"].enabled = true;
                     newState.categoryMap["Case"].enabled = true;
+                    newState.categoryMap["Number"].enabled = true;
+                } else if (id === "infinitive") {
+                    newState.categoryMap["Person"].enabled = false;
+                    newState.categoryMap["Number"].enabled = false;
+                    newState.categoryMap["Gender"].enabled = false;
+                    newState.categoryMap["Case"].enabled = false;
                 } else {
                     newState.categoryMap["Person"].enabled = true;
                     newState.categoryMap["Gender"].enabled = false;
                     newState.categoryMap["Case"].enabled = false;
+                    newState.categoryMap["Number"].enabled = true;
                 }
             }
         }
@@ -246,7 +253,7 @@ export const Quiz =  props => {
             <ParsingGridBase>
                 { categoryList.map(category => {
                     const categoryInfo = state.categoryMap[category];
-                    return <ParsingGroup enabled={categoryInfo.enabled} category={category} items={
+                    return <ParsingGroup key={category} enabled={categoryInfo.enabled} category={category} items={
                         categoryInfo.itemOrder.map(id => categoryInfo[id])}/>
                 })}
             </ParsingGridBase>
