@@ -150,20 +150,20 @@ const extractParsings = verses => {
                         continue;
                     }
 
-                    if (book === 1 && chapter === 27 && verse === 46 &&
-                        word[PARSING] === "2AAI-S--") {
+                    if (word[BOOK] === 1 && word[CHAPTER] === 27 && word[VERSE] === 46 &&
+                        word[LEMMA] === "σαβαχθάνι") {
                         // Skip SABAQANI in Matt 27:46 since it is Aramaic
                         continue;
-                    } else if (book === 2 && chapter === 7 && verse === 34 &&
-                        word[PARSING] === "2APD-S--") {
+                    } else if (word[BOOK] === 2 && word[CHAPTER] === 7 && word[VERSE] === 34 &&
+                        word[LEMMA] === "εφφαθα") {
                         // Skip EFFAQA in Mark 7:34
                         continue;
-                    } else if (book === 2 && chapter === 5 && verse === 41 &&
-                        word[PARSING] === "2AAD-S--") {
+                    } else if (word[BOOK] === 2 && word[CHAPTER] === 5 && word[VERSE] === 41 &&
+                        word[LEMMA] === "κουμ") {
                         // Skip KOUM in Mark 5:41
                         continue;
-                    } else if (book === 7 && chapter === 16 && verse === 22 &&
-                        word[PARSING] === "2AAD-S--") {
+                    } else if (word[BOOK] === 7 && word[CHAPTER] === 16 && word[VERSE] === 22 &&
+                        word[LEMMA] === "θά") {
                         // Skip QA (MARANA QA) in 1 Cor 16:22
                         continue;
                     }
