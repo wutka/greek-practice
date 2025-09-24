@@ -40,6 +40,7 @@ const ParsingGridBase = styled.div`
     display:flex;
     flex-direction: row;
     grid-area: answers;
+    gap: 20px;
 `
 
 const ParsingGroupBase = styled.div`
