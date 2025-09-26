@@ -2,7 +2,7 @@ import './App.css';
 import React, {useState, useEffect} from 'react';
 import { Navigate, BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import {parsingCategories, parsingCategoryLetters, PARSING} from "./bible";
+import {parsingCategories, parsingCategoryLetters, PARSING, LEMMA} from "./bible";
 import boostrap from "bootstrap";
 
 const QuizBase = styled.div`
@@ -12,8 +12,9 @@ const QuizBase = styled.div`
     grid-template-areas: "pad1 book_chapter_verse pad2"
                          "pad1 verse pad2"
                          "pad1 answers pad2"
+                         "pad1 lemma pad2"
                          "pad1 controls pad2";
-    row-gap: 40px;
+    row-gap: 20px;
     padding: 1em;
 `;
 
@@ -25,6 +26,7 @@ const BookChapterVerse = styled.div`
 
 const VerseBase = styled.div`
     grid-area: verse;
+    width: 800px;
 `
 
 const VerseWord = styled.div`
@@ -62,6 +64,19 @@ const VerseDiv = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 10px;
+`
+
+const LemmaWord = styled.div`
+    font-size: xx-large;
+    color: black;
+`
+const LemmaDiv = styled.div`
+    font-family: "SBL Greek";
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-area: lemma;
     gap: 10px;
 `
 
@@ -247,6 +262,15 @@ export const Quiz =  props => {
         );
     }
 
+    const Lemma = props => {
+        if (props.currentWord && state.checkingResults) {
+            return (<LemmaDiv>
+                <LemmaWord>{"Verb: "}</LemmaWord><LemmaWord>{props.currentWord.targetWord[LEMMA]}</LemmaWord>
+            </LemmaDiv>)
+        } else {
+            return (<LemmaDiv><LemmaWord>&nbsp;</LemmaWord></LemmaDiv>)
+        }
+    }
     return (
         <QuizBase>
             <BookChapterVerse>{props.currentWord.book} {props.currentWord.chapter+":"+props.currentWord.verseNumber}</BookChapterVerse>
@@ -258,6 +282,7 @@ export const Quiz =  props => {
                         categoryInfo.itemOrder.map(id => categoryInfo[id])}/>
                 })}
             </ParsingGridBase>
+            <Lemma currentWord={props.currentWord}></Lemma>
             <Controls>
                 <button type="button" className="btn btn-primary" onClick={doCheck} id="check" name="check">Check</button>
                 <button type="button" className="btn btn-primary" onClick={doNext} id="next" name="next">Next</button>
