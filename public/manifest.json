@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "GNT Verb Parsing",
+  "name": "Practice Parsing NT Greek Verbs",
   "icons": [
     {
       "src": "favicon.ico",
